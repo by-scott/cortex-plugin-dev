@@ -1,0 +1,12 @@
+name = "dev"
+version = "1.0.0"
+description = "Development tools for file editing, project mapping, code intelligence, version control, diagnostics, infrastructure, and workflow skills"
+author = "cortex"
+cortex_version = "1.0.0"
+
+[capabilities]
+provides = ["tools", "skills"]
+
+[native]
+library = "lib/libcortex_plugin_dev.so"
+entry = "cortex_plugin_create"
