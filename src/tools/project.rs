@@ -379,31 +379,3 @@ fn dependency_files(root: &Path) -> Vec<String> {
     .map(str::to_string)
     .collect()
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::time::{SystemTime, UNIX_EPOCH};
-
-    fn temp_dir() -> PathBuf {
-        let suffix = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_nanos();
-        let path = std::env::temp_dir().join(format!("cortex-dev-project-{suffix}"));
-        std::fs::create_dir_all(&path).unwrap();
-        path
-    }
-
-    #[test]
-    fn discovers_rust_project() {
-        let tmp = temp_dir();
-        std::fs::write(tmp.join("Cargo.toml"), "[package]\nname=\"x\"\n").unwrap();
-        std::fs::create_dir_all(tmp.join("src")).unwrap();
-        std::fs::write(tmp.join("src/main.rs"), "fn main() {}\n").unwrap();
-        let facts = collect_facts(&tmp).unwrap();
-        assert!(facts.markers.contains(&"rust/cargo"));
-        assert!(facts.test_commands.contains(&"cargo test".to_string()));
-        std::fs::remove_dir_all(tmp).unwrap();
-    }
-}

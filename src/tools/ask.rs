@@ -2,6 +2,7 @@ use cortex_sdk::{Tool, ToolError, ToolResult};
 use std::fmt::Write;
 
 /// A tool that signals the LLM should ask the user a structured question.
+///
 /// The actual user interaction is handled by the runtime's permission/UI layer.
 /// This tool returns a formatted question prompt that the LLM should present.
 pub struct AskUserTool;

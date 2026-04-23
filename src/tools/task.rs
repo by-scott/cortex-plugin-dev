@@ -82,7 +82,8 @@ impl TaskStore {
             metadata: serde_json::Map::new(),
         };
         self.tasks.push(task);
-        self.tasks.last().expect("just pushed")
+        let last_index = self.tasks.len().saturating_sub(1);
+        &self.tasks[last_index]
     }
 
     fn get_mut(&mut self, id: u32) -> Option<&mut TaskItem> {
@@ -114,6 +115,7 @@ impl NamespacedTaskStore {
 
 pub type SharedTaskStore = Arc<Mutex<NamespacedTaskStore>>;
 
+#[must_use]
 pub fn new_task_store() -> SharedTaskStore {
     Arc::new(Mutex::new(NamespacedTaskStore::default()))
 }
@@ -443,68 +445,5 @@ impl TaskUpdateTool {
         let result = format!("Task #{id} updated: [{}] {}", task.status, task.subject);
         drop(store);
         Ok(ToolResult::success(result))
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    struct TestRuntime {
-        invocation: cortex_sdk::InvocationContext,
-    }
-
-    impl cortex_sdk::ToolRuntime for TestRuntime {
-        fn invocation(&self) -> &cortex_sdk::InvocationContext {
-            &self.invocation
-        }
-
-        fn emit_progress(&self, _message: &str) {}
-
-        fn emit_observer(&self, _source: Option<&str>, _content: &str) {}
-    }
-
-    #[test]
-    fn task_state_is_namespaced_by_actor() {
-        let store = new_task_store();
-        let create = TaskCreateTool::new(store.clone());
-        let list = TaskListTool::new(store);
-        let scott = TestRuntime {
-            invocation: cortex_sdk::InvocationContext {
-                tool_name: "task_create".into(),
-                session_id: Some("s1".into()),
-                actor: Some("user:scott".into()),
-                source: Some("rpc".into()),
-                execution_scope: cortex_sdk::ExecutionScope::Foreground,
-            },
-        };
-        let jane = TestRuntime {
-            invocation: cortex_sdk::InvocationContext {
-                tool_name: "task_list".into(),
-                session_id: Some("s2".into()),
-                actor: Some("user:jane".into()),
-                source: Some("rpc".into()),
-                execution_scope: cortex_sdk::ExecutionScope::Foreground,
-            },
-        };
-
-        create
-            .execute_with_runtime(
-                serde_json::json!({"subject": "Fix auth", "description": "trace login bug"}),
-                &scott,
-            )
-            .unwrap();
-
-        let scott_view = list
-            .execute_with_runtime(serde_json::json!({}), &scott)
-            .unwrap()
-            .output;
-        let jane_view = list
-            .execute_with_runtime(serde_json::json!({}), &jane)
-            .unwrap()
-            .output;
-
-        assert!(scott_view.contains("Fix auth"));
-        assert!(jane_view.contains("No tasks"));
     }
 }

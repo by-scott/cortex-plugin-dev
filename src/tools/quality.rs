@@ -268,28 +268,3 @@ fn dependency_state(root: &Path) -> &'static str {
         "not detected"
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::time::{SystemTime, UNIX_EPOCH};
-
-    fn temp_dir() -> PathBuf {
-        let suffix = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_nanos();
-        let path = std::env::temp_dir().join(format!("cortex-dev-quality-{suffix}"));
-        std::fs::create_dir_all(&path).unwrap();
-        path
-    }
-
-    #[test]
-    fn detects_secret_assignment() {
-        let tmp = temp_dir();
-        std::fs::write(tmp.join(".env"), "API_KEY=\"abcdefghijklmnopqrstuvwxyz\"\n").unwrap();
-        let findings = scan_secrets(&tmp, 100).unwrap();
-        assert_eq!(findings.len(), 1);
-        std::fs::remove_dir_all(tmp).unwrap();
-    }
-}

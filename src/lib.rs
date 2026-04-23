@@ -4,8 +4,8 @@
 //! task management, diagnostics, HTTP client, Docker, SQL, process management,
 //! notebook editing, worktree isolation, and workflow skills.
 
-mod symbol_cache;
-mod tools;
+pub mod symbol_cache;
+pub mod tools;
 pub mod treesitter;
 
 use cortex_sdk::prelude::*;

@@ -7,6 +7,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 /// it's a cognitive signal, not a permission gate.
 pub type PlanModeState = Arc<AtomicBool>;
 
+#[must_use]
 pub fn new_plan_state() -> PlanModeState {
     Arc::new(AtomicBool::new(false))
 }

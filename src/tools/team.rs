@@ -4,6 +4,7 @@ use std::sync::{Arc, Mutex};
 
 pub type TeamStore = Arc<Mutex<HashMap<String, HashMap<String, Vec<String>>>>>;
 
+#[must_use]
 pub fn new_team_store() -> TeamStore {
     Arc::new(Mutex::new(HashMap::new()))
 }
@@ -182,66 +183,5 @@ impl TeamDeleteTool {
                 "Team '{name}' not found in {namespace}"
             )))
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    struct TestRuntime {
-        invocation: cortex_sdk::InvocationContext,
-    }
-
-    impl cortex_sdk::ToolRuntime for TestRuntime {
-        fn invocation(&self) -> &cortex_sdk::InvocationContext {
-            &self.invocation
-        }
-
-        fn emit_progress(&self, _message: &str) {}
-
-        fn emit_observer(&self, _source: Option<&str>, _content: &str) {}
-    }
-
-    #[test]
-    fn team_state_is_namespaced_by_actor() {
-        let store = new_team_store();
-        let create = TeamCreateTool::new(store.clone());
-        let delete = TeamDeleteTool::new(store);
-        let scott = TestRuntime {
-            invocation: cortex_sdk::InvocationContext {
-                tool_name: "team_create".into(),
-                session_id: Some("s1".into()),
-                actor: Some("user:scott".into()),
-                source: Some("rpc".into()),
-                execution_scope: cortex_sdk::ExecutionScope::Foreground,
-            },
-        };
-        let jane = TestRuntime {
-            invocation: cortex_sdk::InvocationContext {
-                tool_name: "team_delete".into(),
-                session_id: Some("s2".into()),
-                actor: Some("user:jane".into()),
-                source: Some("rpc".into()),
-                execution_scope: cortex_sdk::ExecutionScope::Foreground,
-            },
-        };
-
-        create
-            .execute_with_runtime(
-                serde_json::json!({"name": "reviewers", "members": ["alice"]}),
-                &scott,
-            )
-            .unwrap();
-
-        let jane_delete = delete
-            .execute_with_runtime(serde_json::json!({"name": "reviewers"}), &jane)
-            .unwrap();
-        assert!(jane_delete.is_error);
-
-        let scott_delete = delete
-            .execute_with_runtime(serde_json::json!({"name": "reviewers"}), &scott)
-            .unwrap();
-        assert!(!scott_delete.is_error);
     }
 }

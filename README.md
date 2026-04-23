@@ -133,7 +133,7 @@ cargo build --release
 cortex plugin pack .
 ```
 
-The packer auto-resolves the native library from `target/release/` based on `manifest.toml` and writes `cortex-plugin-dev-v1.0.0-linux-amd64.cpx`.
+The packer auto-resolves the native library from `target/release/` based on `manifest.toml` and writes `cortex-plugin-dev-v1.2.0-linux-amd64.cpx`.
 
 ## License
 

@@ -133,7 +133,7 @@ cargo build --release
 cortex plugin pack .
 ```
 
-打包器根据 `manifest.toml` 自动从 `target/release/` 定位原生库，并写出 `cortex-plugin-dev-v1.0.0-linux-amd64.cpx`。
+打包器根据 `manifest.toml` 自动从 `target/release/` 定位原生库，并写出 `cortex-plugin-dev-v1.2.0-linux-amd64.cpx`。
 
 ## 许可
 

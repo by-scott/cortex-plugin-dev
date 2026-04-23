@@ -65,7 +65,6 @@ impl SymbolCache {
 
     /// # Errors
     /// Returns `SymbolCacheError` if the in-memory database cannot be created.
-    #[cfg(test)]
     pub fn open_in_memory() -> Result<Self, SymbolCacheError> {
         let conn = Connection::open_in_memory()?;
         conn.execute_batch(SCHEMA)?;
@@ -100,7 +99,6 @@ impl SymbolCache {
     ///
     /// # Errors
     /// Returns `SymbolCacheError` on database errors.
-    #[cfg(test)]
     pub fn invalidate(&self, file_path: &str) -> Result<(), SymbolCacheError> {
         self.conn
             .lock()
@@ -110,7 +108,6 @@ impl SymbolCache {
     }
 
     #[must_use]
-    #[cfg(test)]
     pub fn count(&self) -> usize {
         let Ok(conn) = self.conn.lock() else {
             return 0;
@@ -198,52 +195,4 @@ pub fn content_hash(source: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(source.as_bytes());
     hex::encode(hasher.finalize())[..16].to_string()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn content_hash_deterministic() {
-        let h1 = content_hash("fn main() {}");
-        let h2 = content_hash("fn main() {}");
-        assert_eq!(h1, h2);
-    }
-
-    #[test]
-    fn content_hash_differs() {
-        let h1 = content_hash("fn main() {}");
-        let h2 = content_hash("fn other() {}");
-        assert_ne!(h1, h2);
-    }
-
-    #[test]
-    fn cache_roundtrip() {
-        let cache = SymbolCache::open_in_memory().unwrap();
-        let source = "fn hello() {}";
-        let entry = cache
-            .get_or_parse("test.rs", source, SupportedLanguage::Rust)
-            .unwrap();
-        assert!(!entry.symbols.is_empty());
-        assert!(entry.imports.is_empty());
-        assert_eq!(cache.count(), 1);
-
-        // Second call should hit cache
-        let entry2 = cache
-            .get_or_parse("test.rs", source, SupportedLanguage::Rust)
-            .unwrap();
-        assert_eq!(entry.symbols.len(), entry2.symbols.len());
-    }
-
-    #[test]
-    fn invalidate_removes() {
-        let cache = SymbolCache::open_in_memory().unwrap();
-        cache
-            .get_or_parse("test.rs", "fn a() {}", SupportedLanguage::Rust)
-            .unwrap();
-        assert_eq!(cache.count(), 1);
-        cache.invalidate("test.rs").unwrap();
-        assert_eq!(cache.count(), 0);
-    }
 }
