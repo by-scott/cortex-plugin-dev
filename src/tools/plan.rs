@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
@@ -62,6 +62,10 @@ impl Tool for EnterPlanModeTool {
              Use exit_plan_mode when the plan is ready for review."
         )))
     }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::observer_caps([super::schedule_effect("plan mode state")])
+    }
 }
 
 pub struct ExitPlanModeTool {
@@ -109,5 +113,9 @@ impl Tool for ExitPlanModeTool {
         Ok(ToolResult::success(format!(
             "Plan mode exited. {summary}\nProceeding to implementation."
         )))
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::observer_caps([super::schedule_effect("plan mode state")])
     }
 }

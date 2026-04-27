@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::fmt::Write;
 
 /// A tool that signals the LLM should ask the user a structured question.
@@ -46,6 +46,10 @@ impl Tool for AskUserTool {
             },
             "required": ["question"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::observer_caps([super::send_message_effect("user clarification")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

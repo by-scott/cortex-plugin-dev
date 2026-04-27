@@ -17,7 +17,7 @@ The official development plugin for [Cortex](https://github.com/by-scott/cortex)
 ## Install
 
 ```bash
-cortex plugin install by-scott/cortex-plugin-dev
+cortex plugin install by-scott/cortex-plugin-dev --trust-publisher
 cortex restart
 ```
 
@@ -130,10 +130,11 @@ Tools access Cortex runtime via `cortex-sdk`:
 
 ```bash
 cargo build --release
+cortex plugin sign . --key /path/to/publisher.ed25519 --publisher by-scott
 cortex plugin pack .
 ```
 
-The packer auto-resolves the native library from `target/release/` based on `manifest.toml` and writes `cortex-plugin-dev-v1.2.0-linux-amd64.cpx`.
+The packer auto-resolves the native library from `target/release/` based on `manifest.toml` and writes `cortex-plugin-dev-v1.5.6-linux-amd64.cpx`. Packaged installs require a valid Cortex package signature; `--trust-publisher` should only be used after the publisher key fingerprint has been reviewed.
 
 ## License
 

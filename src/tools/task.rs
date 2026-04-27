@@ -189,10 +189,7 @@ impl Tool for TaskCreateTool {
     }
 
     fn capabilities(&self) -> ToolCapabilities {
-        ToolCapabilities {
-            emits_observer_text: true,
-            ..ToolCapabilities::default()
-        }
+        super::observer_caps([super::schedule_effect("task store")])
     }
 }
 
@@ -261,6 +258,10 @@ impl Tool for TaskListTool {
     ) -> Result<ToolResult, ToolError> {
         let namespace = runtime_namespace(runtime);
         self.list_in_namespace(&namespace)
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::introspect_effect("task store")])
     }
 }
 
@@ -378,10 +379,7 @@ impl Tool for TaskUpdateTool {
     }
 
     fn capabilities(&self) -> ToolCapabilities {
-        ToolCapabilities {
-            emits_observer_text: true,
-            ..ToolCapabilities::default()
-        }
+        super::observer_caps([super::schedule_effect("task store")])
     }
 }
 

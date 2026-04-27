@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 
 /// Structured diff between two files or strings — independent of git.
 pub struct DiffTool;
@@ -23,6 +23,14 @@ impl Tool for DiffTool {
             },
             "required": ["file_a", "file_b"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::read_file_effect("file_a"),
+            super::read_file_effect("file_b"),
+            super::run_process_effect("diff"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use ignore::WalkBuilder;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -246,6 +246,10 @@ impl Tool for ProjectMapTool {
         })
     }
 
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("project root")])
+    }
+
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
         let root = path_input(&input);
         let facts = collect_facts(&root)?;
@@ -279,6 +283,10 @@ impl Tool for TestDiscoverTool {
                 "include_lints": { "type": "boolean", "description": "Include lint/type-check commands when known (default: false)" }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("project root")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
@@ -328,6 +336,10 @@ impl Tool for DependencyAuditTool {
                 "format": { "type": "string", "enum": ["text", "json"], "description": "Output format (default: text)" }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("dependency manifests")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

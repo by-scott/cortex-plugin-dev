@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::path::{Path, PathBuf};
 
 use crate::treesitter::{SupportedLanguage, Symbol, SymbolKind, Visibility};
@@ -249,6 +249,10 @@ impl Tool for SymbolsTool {
         })
     }
 
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("source file")])
+    }
+
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
         let path_str = input
             .get("path")
@@ -343,6 +347,13 @@ impl Tool for SymbolIndexTool {
                 }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::read_file_effect("workspace source files"),
+            super::write_file_effect("symbol cache"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
@@ -445,6 +456,13 @@ impl Tool for SymbolSearchTool {
         })
     }
 
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::read_file_effect("workspace source files"),
+            super::write_file_effect("symbol cache"),
+        ])
+    }
+
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
         let query = input
             .get("query")
@@ -532,6 +550,10 @@ impl Tool for ImportsTool {
             },
             "required": ["path"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("source file")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

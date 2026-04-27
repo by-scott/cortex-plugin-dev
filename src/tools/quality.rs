@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use ignore::WalkBuilder;
 use regex::Regex;
 use std::path::{Path, PathBuf};
@@ -45,6 +45,10 @@ impl Tool for SecretScanTool {
                 "max_files": { "type": "integer", "description": "Maximum files to scan (default: 10000)" }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("workspace files")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
@@ -176,6 +180,13 @@ impl Tool for QualityGateTool {
                 "path": { "type": "string", "description": "Workspace root (default: current directory)" }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::read_file_effect("workspace files"),
+            super::run_process_effect("git status"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

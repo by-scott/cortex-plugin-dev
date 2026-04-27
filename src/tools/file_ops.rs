@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -93,6 +93,10 @@ impl Tool for ReadFileTool {
         })
     }
 
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("path")])
+    }
+
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
         let path = normalize_path(string_input(&input, "path")?)?;
         let start_line = usize::try_from(optional_u64(&input, "start_line", 1))
@@ -137,6 +141,10 @@ impl Tool for WriteFileTool {
             },
             "required": ["path", "content"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::write_file_effect("path")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
@@ -214,6 +222,13 @@ impl Tool for ReplaceInFileTool {
             },
             "required": ["path", "old", "new"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::read_file_effect("path"),
+            super::write_file_effect("path"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

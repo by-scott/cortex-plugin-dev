@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::process::Command;
 
 fn run_git(args: &[&str]) -> Result<String, ToolError> {
@@ -49,6 +49,13 @@ impl Tool for WorktreeCreateTool {
         })
     }
 
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::run_process_effect("git worktree add"),
+            super::write_file_effect(".cortex-worktrees/**"),
+        ])
+    }
+
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
         let name = input
             .get("name")
@@ -97,6 +104,13 @@ impl Tool for WorktreeRemoveTool {
         })
     }
 
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::run_process_effect("git worktree remove"),
+            super::delete_file_effect(".cortex-worktrees/**"),
+        ])
+    }
+
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
         let name = input
             .get("name")
@@ -138,6 +152,10 @@ impl Tool for WorktreeListTool {
 
     fn input_schema(&self) -> serde_json::Value {
         serde_json::json!({"type": "object", "properties": {}})
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::run_process_effect("git worktree list")])
     }
 
     fn execute(&self, _input: serde_json::Value) -> Result<ToolResult, ToolError> {

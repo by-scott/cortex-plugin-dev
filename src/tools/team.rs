@@ -63,10 +63,7 @@ impl Tool for TeamCreateTool {
     }
 
     fn capabilities(&self) -> ToolCapabilities {
-        ToolCapabilities {
-            emits_observer_text: true,
-            ..ToolCapabilities::default()
-        }
+        super::observer_caps([super::delegate_effect("team state")])
     }
 }
 
@@ -152,6 +149,10 @@ impl Tool for TeamDeleteTool {
     ) -> Result<ToolResult, ToolError> {
         let namespace = super::runtime::namespace(runtime);
         self.delete_in_namespace(&input, &namespace)
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::delegate_effect("team state")])
     }
 }
 

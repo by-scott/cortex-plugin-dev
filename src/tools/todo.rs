@@ -55,10 +55,7 @@ impl Tool for TodoWriteTool {
     }
 
     fn capabilities(&self) -> ToolCapabilities {
-        ToolCapabilities {
-            emits_observer_text: true,
-            ..ToolCapabilities::default()
-        }
+        super::observer_caps([super::schedule_effect("session notes")])
     }
 }
 

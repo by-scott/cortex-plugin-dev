@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 
 /// Summarize the current conversation context for the user.
 pub struct BriefTool;
@@ -24,6 +24,10 @@ impl Tool for BriefTool {
                 }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::introspect_effect("conversation state")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

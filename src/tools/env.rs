@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 
 /// Read environment variables and system info.
 pub struct EnvTool;
@@ -24,6 +24,10 @@ impl Tool for EnvTool {
                 }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::introspect_effect("process environment")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

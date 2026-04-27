@@ -1,11 +1,71 @@
 name = "dev"
-version = "1.2.0"
+version = "1.5.6"
 description = "Development tools for file editing, project mapping, code intelligence, version control, diagnostics, infrastructure, and workflow skills"
 author = "cortex"
-cortex_version = "1.2.0"
+cortex_version = "1.5.6"
+trust = "trusted_native"
 
 [capabilities]
 provides = ["tools", "skills"]
+file_read = ["**"]
+file_write = ["**"]
+network = ["*"]
+process = true
+secrets = false
+background = true
+
+[sandbox]
+level = "trusted_in_process"
+network = "inherit"
+filesystem = "declared_paths"
+writable_paths = ["**"]
+seccomp = ""
+uid_drop = false
+
+[package]
+publisher_id = "by-scott"
+manifest_sha256 = ""
+binary_sha256 = ""
+sbom = "sbom.spdx.json"
+risk_profile = "risk.toml"
+signature_algorithm = ""
+public_key = ""
+signature = ""
+
+[package.conformance]
+suite = "cortex-plugin-local-1.5.6"
+passed = true
+checked_at = "2026-04-28T05:58:36+08:00"
+
+[[package.conformance.checks]]
+name = "governance"
+passed = true
+message = ""
+
+[[package.conformance.checks]]
+name = "manifest identity"
+passed = true
+message = ""
+
+[[package.conformance.checks]]
+name = "manifest version"
+passed = true
+message = ""
+
+[[package.conformance.checks]]
+name = "cortex compatibility"
+passed = true
+message = ""
+
+[[package.conformance.checks]]
+name = "capability declaration"
+passed = true
+message = ""
+
+[[package.conformance.checks]]
+name = "native isolation boundary"
+passed = true
+message = ""
 
 [native]
 library = "lib/libcortex_plugin_dev.so"

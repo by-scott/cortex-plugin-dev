@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 
 /// Send a message to the user or to another agent.
 /// For user messages: ensures output is visible (not buried in tool results).
@@ -47,5 +47,9 @@ impl Tool for SendMessageTool {
         // The message content becomes the tool result, which is included
         // in the response to the user or forwarded to the target agent.
         Ok(ToolResult::success(format!("[To {to}]: {message}")))
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::send_message_effect("recipient")])
     }
 }

@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::process::Command;
 
 fn run_git(args: &[&str]) -> Result<String, ToolError> {
@@ -48,6 +48,10 @@ impl Tool for GitStatusTool {
                 }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::run_process_effect("git status")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
@@ -101,6 +105,13 @@ impl Tool for GitDiffTool {
                 }
             }
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::run_process_effect("git diff"),
+            super::read_file_effect("repository paths"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
@@ -175,6 +186,10 @@ impl Tool for GitLogTool {
         })
     }
 
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::run_process_effect("git log")])
+    }
+
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {
         let count = input
             .get("count")
@@ -237,6 +252,13 @@ impl Tool for GitCommitTool {
             },
             "required": ["message"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::run_process_effect("git add/commit"),
+            super::write_file_effect(".git/**"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

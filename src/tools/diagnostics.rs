@@ -50,11 +50,13 @@ impl Tool for DiagnosticsTool {
     }
 
     fn capabilities(&self) -> ToolCapabilities {
-        ToolCapabilities {
-            emits_progress: true,
-            emits_observer_text: true,
-            background_safe: true,
-        }
+        super::progress_caps(
+            [
+                super::read_file_effect("project sources"),
+                super::run_process_effect("diagnostic command"),
+            ],
+            true,
+        )
     }
 }
 

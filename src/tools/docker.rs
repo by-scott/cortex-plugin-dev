@@ -66,11 +66,7 @@ impl Tool for DockerTool {
     }
 
     fn capabilities(&self) -> ToolCapabilities {
-        ToolCapabilities {
-            emits_progress: true,
-            emits_observer_text: true,
-            ..ToolCapabilities::default()
-        }
+        super::progress_caps([super::run_process_effect("docker")], false)
     }
 }
 

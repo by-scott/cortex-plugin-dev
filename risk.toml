@@ -1,0 +1,24 @@
+[risk.tools.dev]
+effect = "ReadFile"
+target = "**"
+floor = "Allow"
+
+[risk.tools.dev.write]
+effect = "WriteFile"
+target = "**"
+floor = "RequireConfirmation"
+
+[risk.tools.dev.network]
+effect = "NetworkRequest"
+target = "*"
+floor = "Review"
+
+[risk.tools.dev.process]
+effect = "RunProcess"
+target = "plugin subprocess"
+floor = "RequireConfirmation"
+
+[risk.tools.dev.background]
+effect = "ScheduleTask"
+target = "background execution"
+floor = "RequireConfirmation"

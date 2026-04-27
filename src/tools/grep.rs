@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::path::Path;
 
 fn parse_usize_field(
@@ -190,6 +190,10 @@ impl Tool for GrepTool {
             },
             "required": ["pattern"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("search path")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

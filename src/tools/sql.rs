@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 
 /// Execute SQL queries against `SQLite` databases.
 pub struct SqlTool;
@@ -24,6 +24,13 @@ impl Tool for SqlTool {
             },
             "required": ["db", "query"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::read_file_effect("SQLite database"),
+            super::write_file_effect("SQLite database when write=true"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

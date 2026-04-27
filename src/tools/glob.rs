@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::cmp::Reverse;
 
 fn parse_limit(input: &serde_json::Value) -> Result<usize, ToolError> {
@@ -44,6 +44,10 @@ impl Tool for GlobTool {
             },
             "required": ["pattern"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::read_file_effect("directory tree")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

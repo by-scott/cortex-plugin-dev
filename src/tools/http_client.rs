@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 use std::process::Command;
 
 /// Enhanced HTTP client for API testing and interaction.
@@ -42,6 +42,10 @@ impl Tool for HttpRequestTool {
             },
             "required": ["url"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([super::network_effect("requested URL")])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

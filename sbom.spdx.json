@@ -1,0 +1,47 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "cortex-plugin-dev-1.5.6",
+  "documentNamespace": "https://github.com/by-scott/cortex-plugin-dev/releases/tag/v1.5.6/sbom",
+  "creationInfo": {
+    "created": "2026-04-27T21:58:36Z",
+    "creators": [
+      "Tool: cortex-plugin-dev-release"
+    ]
+  },
+  "packages": [
+    {
+      "name": "cortex-plugin-dev",
+      "SPDXID": "SPDXRef-Package-cortex-plugin-dev",
+      "versionInfo": "1.5.6",
+      "downloadLocation": "https://github.com/by-scott/cortex-plugin-dev",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "name": "cortex-sdk",
+      "SPDXID": "SPDXRef-Package-cortex-sdk",
+      "versionInfo": "1.5.4",
+      "downloadLocation": "https://crates.io/crates/cortex-sdk",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION"
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-Package-cortex-plugin-dev"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-cortex-plugin-dev",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Package-cortex-sdk"
+    }
+  ]
+}

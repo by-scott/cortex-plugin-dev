@@ -17,7 +17,7 @@
 ## 安装
 
 ```bash
-cortex plugin install by-scott/cortex-plugin-dev
+cortex plugin install by-scott/cortex-plugin-dev --trust-publisher
 cortex restart
 ```
 
@@ -130,10 +130,11 @@ cortex restart
 
 ```bash
 cargo build --release
+cortex plugin sign . --key /path/to/publisher.ed25519 --publisher by-scott
 cortex plugin pack .
 ```
 
-打包器根据 `manifest.toml` 自动从 `target/release/` 定位原生库，并写出 `cortex-plugin-dev-v1.2.0-linux-amd64.cpx`。
+打包器根据 `manifest.toml` 自动从 `target/release/` 定位原生库，并写出 `cortex-plugin-dev-v1.5.6-linux-amd64.cpx`。打包安装要求有效的 Cortex package signature；只有在审阅过 publisher key fingerprint 后，才应使用 `--trust-publisher`。
 
 ## 许可
 

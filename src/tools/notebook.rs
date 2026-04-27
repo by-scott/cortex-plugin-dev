@@ -1,4 +1,4 @@
-use cortex_sdk::{Tool, ToolError, ToolResult};
+use cortex_sdk::{Tool, ToolCapabilities, ToolError, ToolResult};
 
 fn parse_cell_number(input: &serde_json::Value) -> Result<Option<usize>, ToolError> {
     input
@@ -39,6 +39,13 @@ impl Tool for NotebookEditTool {
             },
             "required": ["path", "new_source"]
         })
+    }
+
+    fn capabilities(&self) -> ToolCapabilities {
+        super::caps([
+            super::read_file_effect("notebook path"),
+            super::write_file_effect("notebook path"),
+        ])
     }
 
     fn execute(&self, input: serde_json::Value) -> Result<ToolResult, ToolError> {

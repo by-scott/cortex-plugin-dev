@@ -62,11 +62,7 @@ impl Tool for ProcessTool {
     }
 
     fn capabilities(&self) -> ToolCapabilities {
-        ToolCapabilities {
-            emits_progress: true,
-            emits_observer_text: true,
-            background_safe: true,
-        }
+        super::progress_caps([super::run_process_effect("process inspection")], true)
     }
 }
 

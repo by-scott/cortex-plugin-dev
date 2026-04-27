@@ -1,0 +1,33 @@
+suite = "cortex-plugin-local-1.5.6"
+passed = true
+checked_at = "2026-04-28T05:58:36+08:00"
+
+[[checks]]
+name = "governance"
+passed = true
+message = ""
+
+[[checks]]
+name = "manifest identity"
+passed = true
+message = ""
+
+[[checks]]
+name = "manifest version"
+passed = true
+message = ""
+
+[[checks]]
+name = "cortex compatibility"
+passed = true
+message = ""
+
+[[checks]]
+name = "capability declaration"
+passed = true
+message = ""
+
+[[checks]]
+name = "native isolation boundary"
+passed = true
+message = ""
