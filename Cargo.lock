@@ -95,7 +95,7 @@ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 
 [[package]]
 name = "cortex-plugin-dev"
-version = "1.5.7"
+version = "1.6.0"
 dependencies = [
  "chrono",
  "cortex-sdk",
@@ -115,9 +115,7 @@ dependencies = [
 
 [[package]]
 name = "cortex-sdk"
-version = "1.5.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2248d35a40f4183a047ddc4ee5c34341b3e1a4eee5ebde83dfd02330501d0a33"
+version = "1.6.0"
 dependencies = [
  "serde",
  "serde_json",

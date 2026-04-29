@@ -134,7 +134,7 @@ cortex plugin sign . --key /path/to/publisher.ed25519 --publisher by-scott
 cortex plugin pack .
 ```
 
-The packer auto-resolves the native library from `target/release/` based on `manifest.toml` and writes `cortex-plugin-dev-v1.5.7-linux-amd64.cpx`. Packaged installs require a valid Cortex package signature; `--yes` should only be used after the publisher key fingerprint has been reviewed.
+The packer auto-resolves the native library from `target/release/` based on `manifest.toml` and writes `cortex-plugin-dev-v1.6.0-linux-amd64.cpx`. Packaged installs require a valid Cortex package signature; `--yes` should only be used after the publisher key fingerprint has been reviewed.
 
 ## License
 
