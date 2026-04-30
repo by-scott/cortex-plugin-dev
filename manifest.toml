@@ -1,8 +1,8 @@
 name = "dev"
-version = "1.6.0"
+version = "1.6.1"
 description = "Development tools for file editing, project mapping, code intelligence, version control, diagnostics, infrastructure, and workflow skills"
 author = "cortex"
-cortex_version = "1.6.0"
+cortex_version = "1.6.1"
 trust = "trusted_native"
 
 [capabilities]
@@ -33,9 +33,9 @@ public_key = ""
 signature = ""
 
 [package.conformance]
-suite = "cortex-plugin-local-1.6.0"
+suite = "cortex-plugin-local-1.6.1"
 passed = true
-checked_at = "2026-04-28T12:52:49+08:00"
+checked_at = "2026-04-30T10:15:21+08:00"
 
 [[package.conformance.checks]]
 name = "governance"
